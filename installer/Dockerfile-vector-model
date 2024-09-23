@@ -1,10 +1,21 @@
-FROM python:3.11-slim-bookworm AS vector-model
+# Use an image that supports armv7
+FROM python:3.11-slim-buster AS vector-model
 
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Dependencies for building Python packages
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY installer/install_model.py install_model.py
 RUN pip3 install --upgrade pip setuptools && \
     pip install pycrawlers && \
     pip install transformers && \
     python3 install_model.py
 
+# Use a scratch image for the final stage
 FROM scratch
-COPY --from=vector-model model /opt/maxkb/app/model
+
+# Copy the model from the first stage
+COPY --from=vector-model /opt/maxkb/app/model /opt/maxkb/app/model
