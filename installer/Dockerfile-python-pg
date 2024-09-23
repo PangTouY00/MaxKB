@@ -23,9 +23,9 @@ RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 ARG DEPENDENCIES="curl ca-certificates vim postgresql-15-pgvector"
 
 # 使用 apt-get 命令安装 PostgreSQL 相关依赖
-RUN apt-get update && apt-get install -y --no-install-recommends $DEPENDENCIES && \
-    apt-get clean && apt-get autoclean && apt-get autoremove && \
-    rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y --no-install-recommends $DEPENDENCIES && \
+#    apt-get clean && apt-get autoclean && apt-get autoremove && \
+#    rm -rf /var/lib/apt/lists/*
 
 # 从 python-stage 阶段复制 Python 相关文件到当前阶段
 COPY --from=python-stage /usr/local /usr/local
