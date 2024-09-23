@@ -15,10 +15,11 @@ on:
         options:
           - linux/amd64
           - linux/arm64
-          - linux/amd64,linux/arm64
+          - linux/armv7
+          - linux/amd64,linux/arm64,linux/armv7
 
 jobs:
-  build-and-push-vector-model-to-ghcr:
+  build-and-push-vector-model-to-docker-hub:
     runs-on: ubuntu-latest
     steps:
       - name: Check Disk Space
@@ -42,7 +43,7 @@ jobs:
       - name: Prepare
         id: prepare
         run: |
-          DOCKER_IMAGE=ghcr.io/1panel-dev/maxkb-vector-model
+          DOCKER_IMAGE=docker.io/your-docker-hub-username/maxkb-vector-model
           DOCKER_PLATFORMS=${{ github.event.inputs.architecture }}
           TAG_NAME=${{ github.event.inputs.dockerImageTag }}
           DOCKER_IMAGE_TAGS="--tag ${DOCKER_IMAGE}:${TAG_NAME} --tag ${DOCKER_IMAGE}:latest"
@@ -57,12 +58,12 @@ jobs:
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      - name: Login to GitHub Container Registry
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GH_TOKEN }}
+          registry: docker.io
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Docker Buildx (build-and-push)
         run: |
           docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }} -f installer/Dockerfile-vector-model
