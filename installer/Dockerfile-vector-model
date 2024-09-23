@@ -4,7 +4,7 @@ FROM arm32v7/python:3.11-slim AS vector-model
 # 安装依赖
 RUN pip3 install --upgrade pip setuptools
 RUN pip install --extra-index-url https://www.piwheels.org/simple pycrawlers
-#    pip install transformers
+RUN pip install --extra-index-url https://www.piwheels.org/simple transformers
 
 # 拷贝安装模型的脚本
 COPY installer/install_model.py install_model.py
