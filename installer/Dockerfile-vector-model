@@ -1,5 +1,5 @@
 # Use an image that supports armv7
-FROM python:3.11 AS vector-model
+FROM python AS vector-model
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
