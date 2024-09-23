@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:w1770946466
+        with:
           ref: main
       - name: Prepare
         id: prepare
