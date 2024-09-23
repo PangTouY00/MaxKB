@@ -1,5 +1,5 @@
 # Use an image that supports armv7
-FROM arm32v7/python:3.11-slim AS vector-model
+FROM python
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -18,4 +18,4 @@ RUN pip3 install --upgrade pip setuptools && \
 FROM scratch
 
 # Copy the model from the first stage
-COPY --from=vector-model /opt/maxkb/app/model /opt/maxkb/app/model
+COPY /opt/maxkb/app/model /opt/maxkb/app/model
