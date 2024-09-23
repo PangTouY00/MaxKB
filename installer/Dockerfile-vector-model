@@ -1,6 +1,8 @@
 FROM python:3.11-slim-bookworm AS vector-model
 
 COPY installer/install_model.py install_model.py
+
+RUN apt-get update && apt-get install -y build-essential libssl-dev libffi-dev python3-dev curl
 RUN pip3 install --upgrade pip setuptools && \
     pip install pycrawlers && \
     pip install transformers && \
