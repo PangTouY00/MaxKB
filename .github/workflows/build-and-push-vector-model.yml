@@ -15,11 +15,11 @@ on:
         options:
           - linux/amd64
           - linux/arm64
-          - linux/armv7
-          - linux/amd64,linux/arm64,linux/armv7
+          - linux/arm/v7
+          - linux/amd64,linux/arm64,linux/arm/v7
 
 jobs:
-  build-and-push-vector-model-to-docker-hub:
+  build-and-push-vector-model-to-dockerhub:
     runs-on: ubuntu-latest
     steps:
       - name: Check Disk Space
@@ -66,4 +66,4 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       - name: Docker Buildx (build-and-push)
         run: |
-          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }} -f installer/Dockerfile-vector-model
+          docker buildx build --output "type=image,push=true" ${{ steps.prepare.outputs.buildx_args }} -f installer/Dockerfile-vector-model .
