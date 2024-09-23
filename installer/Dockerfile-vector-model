@@ -1,6 +1,8 @@
 # 使用支持 armv7 的 Python 基础镜像
 FROM arm32v7/python:3.11-slim AS vector-model
 
+# WORKDIR /opt/my_project
+
 # Install required libraries for lxml
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxslt1-dev \
@@ -13,6 +15,7 @@ RUN pip install --extra-index-url https://www.piwheels.org/simple pycrawlers
 RUN pip install --extra-index-url https://www.piwheels.org/simple transformers
 RUN pip install --extra-index-url https://www.piwheels.org/simple numpy
 
+RUN pwd
 # 拷贝安装模型的脚本
 COPY installer/install_model.py install_model.py
 
