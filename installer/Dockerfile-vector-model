@@ -1,21 +1,17 @@
-# Use an image that supports armv7
-FROM python
+# 使用支持 armv7 的 Python 基础镜像
+FROM arm32v7/python:3.11-slim AS vector-model
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    # Dependencies for building Python packages
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install Python dependencies
-COPY installer/install_model.py install_model.py
+# 安装依赖
 RUN pip3 install --upgrade pip setuptools && \
     pip install pycrawlers && \
-    pip install transformers && \
-    python3 install_model.py
+    pip install transformers
 
-# Use a scratch image for the final stage
+# 拷贝安装模型的脚本
+COPY installer/install_model.py install_model.py
+
+# 运行安装模型的脚本
+RUN python3 install_model.py
+
+# 从 vector-model 阶段复制模型到 scratch 镜像
 FROM scratch
-
-# Copy the model from the first stage
-#COPY --from=python model /opt/maxkb/app/model 
+COPY --from=vector-model /model /opt/maxkb/app/model
