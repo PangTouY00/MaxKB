@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip3 install --upgrade pip setuptools
 RUN pip install --extra-index-url https://www.piwheels.org/simple pycrawlers
 RUN pip install --extra-index-url https://www.piwheels.org/simple transformers
+RUN pip install --extra-index-url https://www.piwheels.org/simple numpy
 
 # 拷贝安装模型的脚本
 COPY installer/install_model.py install_model.py
