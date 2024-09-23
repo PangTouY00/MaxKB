@@ -5,7 +5,7 @@ RUN cd ui && \
     npm install && \
     npm run build && \
     rm -rf ./node_modules
-FROM ghcr.io/1panel-dev/maxkb-python-pg:python3.11-pg15.8 AS stage-build
+FROM w1770946466/maxkb-python-pg AS stage-build
 
 ARG DEPENDENCIES="                    \
         python3-pip"
