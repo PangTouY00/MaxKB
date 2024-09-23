@@ -1,23 +1,33 @@
 # 定义第一阶段，用于安装 Python 相关依赖
-FROM python:3.11-alpine AS python-stage
+FROM python:3.11-slim-bullseye AS python-stage
 
 # 安装 Python 相关依赖
-# 使用 apk 命令安装依赖项
-RUN apk add --no-cache libexpat-dev libffi-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libexpat1-dev \
+    libffi-dev \
+    curl \
+    ca-certificates \
+    vim \
+    # 其他可能需要的依赖项...
+
+# 清理以减小镜像大小
+RUN apt-get clean all && \
+    rm -rf /var/lib/apt/lists/*
 
 # 定义第二阶段，用于安装 PostgreSQL 和相关依赖
-FROM postgres:15.8-alpine
+FROM postgres:15.8-bullseye
 
 # 设置时区为亚洲/上海
-RUN apk add --no-cache tzdata && \
-    ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone
+RUN ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
 # 安装 PostgreSQL 相关依赖
 ARG DEPENDENCIES="curl ca-certificates vim postgresql-15-pgvector"
 
-# 使用 apk 命令安装 PostgreSQL 相关依赖
-RUN apk add --no-cache $DEPENDENCIES
+# 使用 apt-get 命令安装 PostgreSQL 相关依赖
+RUN apt-get update && apt-get install -y --no-install-recommends $DEPENDENCIES && \
+    apt-get clean all && \
+    rm -rf /var/lib/apt/lists/*
 
 # 从 python-stage 阶段复制 Python 相关文件到当前阶段
 COPY --from=python-stage /usr/local /usr/local
