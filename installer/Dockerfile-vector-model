@@ -18,4 +18,4 @@ RUN pip3 install --upgrade pip setuptools && \
 FROM scratch
 
 # Copy the model from the first stage
-COPY --from=python model /opt/maxkb/app/model 
+#COPY --from=python model /opt/maxkb/app/model 
